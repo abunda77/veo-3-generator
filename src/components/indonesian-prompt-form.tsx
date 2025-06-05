@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { IndonesianPromptFormData } from "@/lib/schemas";
@@ -49,16 +50,13 @@ export function IndonesianPromptForm({ onFormChange, isTranslating }: Indonesian
   const watchedValues = form.watch();
 
   useEffect(() => {
-    // Check if form is valid before calling onFormChange
-    // This prevents incomplete data from being sent for translation too early
     const aFieldIsNotEmpty = Object.values(watchedValues).some(value => typeof value === 'string' && value.trim() !== '');
     if (form.formState.isValid && aFieldIsNotEmpty) {
       onFormChange(watchedValues);
     } else if (!aFieldIsNotEmpty) {
-      // If all fields are empty, maybe signal to clear translation
       onFormChange(defaultIndonesianPromptValues);
     }
-  }, [watchedValues, onFormChange, form.formState.isValid]);
+  }, [JSON.stringify(watchedValues), onFormChange, form.formState.isValid]);
 
   return (
     <Card>
