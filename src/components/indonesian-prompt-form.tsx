@@ -91,25 +91,27 @@ const formFields: Array<FormFieldConfig> = [
   { name: "additionalDetails", label: "Additional Details", placeholder: "e.g., Mengenakan gaun merah, ada anjing kecil berlarian.", isTextarea: true },
 ];
 
-export function IndonesianPromptForm({ onFormChange, isTranslating }: IndonesianPromptFormProps) {
+interface IndonesianPromptFormProps {
+  onFormValuesChange: (data: IndonesianPromptFormData) => void;
+  onGeneratePrompts: () => void;
+  isProcessing: boolean;
+}
+
+export function IndonesianPromptForm({ onFormValuesChange, onGeneratePrompts, isProcessing }: IndonesianPromptFormProps) {
   const form = useForm<IndonesianPromptFormData>({
     resolver: zodResolver(IndonesianPromptSchema),
     defaultValues: defaultIndonesianPromptValues,
-    mode: "onChange",
+    mode: "onChange", // Keep mode to onChange for instant validation
   });
 
   const watchedValues = form.watch();
 
   useEffect(() => {
-    const aFieldIsNotEmpty = Object.values(watchedValues).some(value => typeof value === 'string' && value.trim() !== '');
-    if (form.formState.isValid && aFieldIsNotEmpty) {
-      onFormChange(watchedValues);
-    } else if (!aFieldIsNotEmpty) {
-      // If all fields are empty, reset to default (which effectively clears translation)
-      onFormChange(defaultIndonesianPromptValues);
-    }
-    // Only depend on the stringified version of watchedValues to avoid infinite loops
-  }, [JSON.stringify(watchedValues), onFormChange, form.formState.isValid]);
+    // This effect now only informs the parent about form value changes
+    // It doesn't trigger translation directly.
+    onFormValuesChange(watchedValues);
+  }, [JSON.stringify(watchedValues), onFormValuesChange]);
+
 
   return (
     <Card>
@@ -163,8 +165,8 @@ export function IndonesianPromptForm({ onFormChange, isTranslating }: Indonesian
                           </Select>
                           {showCustomInput && (
                             <Input
-                              {...formFieldProps} // Use controller props for binding
-                              value={currentFieldValue === "Lainnya" ? "" : currentFieldValue} // Ensure input shows custom text or is empty
+                              {...formFieldProps} 
+                              value={currentFieldValue === "Lainnya" ? "" : currentFieldValue} 
                               onChange={(e) => form.setValue(fieldConfig.name, e.target.value, { shouldValidate: true, shouldDirty: true })}
                               placeholder={fieldConfig.placeholder || `Detail untuk ${fieldConfig.label.toLowerCase()}`}
                               className="mt-2"
@@ -193,9 +195,9 @@ export function IndonesianPromptForm({ onFormChange, isTranslating }: Indonesian
               ))}
             </div>
             <div className="flex justify-end pt-4">
-              <Button type="button" disabled={isTranslating || !form.formState.isValid} onClick={() => onFormChange(form.getValues())}>
-                {isTranslating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Translate Prompt
+              <Button type="button" disabled={isProcessing || !form.formState.isValid} onClick={onGeneratePrompts}>
+                {isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Buat Prompt (ID & EN)
               </Button>
             </div>
           </form>
@@ -203,8 +205,4 @@ export function IndonesianPromptForm({ onFormChange, isTranslating }: Indonesian
       </CardContent>
     </Card>
   );
-}
-interface IndonesianPromptFormProps {
-  onFormChange: (data: IndonesianPromptFormData) => void;
-  isTranslating: boolean;
 }
