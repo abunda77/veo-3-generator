@@ -4,7 +4,7 @@
 import type { IndonesianPromptFormData } from "@/lib/schemas";
 import { IndonesianPromptSchema, defaultIndonesianPromptValues } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, type UseFormReturn } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -19,22 +19,73 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect } from "react";
 import { Loader2 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-interface IndonesianPromptFormProps {
-  onFormChange: (data: IndonesianPromptFormData) => void;
-  isTranslating: boolean;
+interface FormFieldConfig {
+  name: keyof IndonesianPromptFormData;
+  label: string;
+  placeholder?: string;
+  isTextarea?: boolean;
+  selectOptions?: Array<{ value: string; label: string }>;
 }
 
-const formFields: Array<{ name: keyof IndonesianPromptFormData; label: string; placeholder: string; isTextarea?: boolean }> = [
+const cameraMovementOptions = [
+  { value: "Static", label: "Diam (Static)" },
+  { value: "Pan", label: "Geser (Pan)" },
+  { value: "Tilt", label: "Miring (Tilt)" },
+  { value: "Zoom In", label: "Zoom In" },
+  { value: "Zoom Out", label: "Zoom Out" },
+  { value: "Tracking Shot", label: "Mengikuti (Tracking Shot)" },
+  { value: "Handheld Shot", label: "Bidikan Genggam (Handheld Shot)" },
+  { value: "Drone Shot", label: "Bidikan Drone (Drone Shot)" },
+  { value: "Lainnya", label: "Lainnya..." },
+];
+
+const lightingOptions = [
+  { value: "Natural", label: "Alami (Natural)" },
+  { value: "Studio", label: "Studio" },
+  { value: "Low Key", label: "Low Key (Gelap)" },
+  { value: "High Key", label: "High Key (Terang)" },
+  { value: "Backlight", label: "Cahaya Belakang (Backlight)" },
+  { value: "Side Light", label: "Cahaya Samping (Side Light)" },
+  { value: "Spotlight", label: "Lampu Sorot (Spotlight)" },
+  { value: "Lainnya", label: "Lainnya..." },
+];
+
+const videoStyleOptions = [
+  { value: "Cinematic", label: "Sinematik (Cinematic)" },
+  { value: "Documentary", label: "Dokumenter (Documentary)" },
+  { value: "Vlog", label: "Vlog" },
+  { value: "Animation", label: "Animasi (Animation)" },
+  { value: "Black and White", label: "Hitam Putih (Black and White)" },
+  { value: "Vintage", label: "Vintage" },
+  { value: "Cartoon", label: "Kartun (Cartoon)" },
+  { value: "Realistic", label: "Realistis (Realistic)" },
+  { value: "Lainnya", label: "Lainnya..." },
+];
+
+const videoMoodOptions = [
+  { value: "Cheerful", label: "Ceria (Cheerful)" },
+  { value: "Melancholic", label: "Melankolis (Melancholic)" },
+  { value: "Suspenseful", label: "Tegang (Suspenseful)" },
+  { value: "Romantic", label: "Romantis (Romantic)" },
+  { value: "Mysterious", label: "Misterius (Mysterious)" },
+  { value: "Nostalgic", label: "Nostalgia (Nostalgic)" },
+  { value: "Inspirational", label: "Inspiratif (Inspirational)" },
+  { value: "Scary", label: "Menakutkan (Scary)" },
+  { value: "Lainnya", label: "Lainnya..." },
+];
+
+const formFields: Array<FormFieldConfig> = [
   { name: "subject", label: "Subject", placeholder: "e.g., Seorang wanita muda" },
   { name: "action", label: "Action", placeholder: "e.g., berjalan di taman" },
   { name: "expression", label: "Expression", placeholder: "e.g., tersenyum bahagia" },
   { name: "place", label: "Place", placeholder: "e.g., taman kota yang ramai" },
   { name: "time", label: "Time", placeholder: "e.g., sore hari keemasan" },
-  { name: "cameraMovement", label: "Camera Movement", placeholder: "e.g., close up, panning shot" },
-  { name: "lighting", label: "Lighting", placeholder: "e.g., cahaya alami, dramatis" },
-  { name: "videoStyle", label: "Video Style", placeholder: "e.g., sinematik, dokumenter" },
-  { name: "videoMood", label: "Video Mood", placeholder: "e.g., ceria, melankolis" },
+  { name: "cameraMovement", label: "Camera Movement", selectOptions: cameraMovementOptions, placeholder: "e.g., mengikuti subjek dari belakang" },
+  { name: "lighting", label: "Lighting", selectOptions: lightingOptions, placeholder: "e.g., cahaya senja hangat" },
+  { name: "videoStyle", label: "Video Style", selectOptions: videoStyleOptions, placeholder: "e.g., gaya Wes Anderson" },
+  { name: "videoMood", label: "Video Mood", selectOptions: videoMoodOptions, placeholder: "e.g., penuh harapan dan optimis" },
   { name: "soundMusic", label: "Sound/Music", placeholder: "e.g., musik instrumental yang menenangkan" },
   { name: "spokenSentence", label: "Spoken Sentence", placeholder: "e.g., 'Ini hari yang indah.'", isTextarea: true },
   { name: "additionalDetails", label: "Additional Details", placeholder: "e.g., Mengenakan gaun merah, ada anjing kecil berlarian.", isTextarea: true },
@@ -54,8 +105,10 @@ export function IndonesianPromptForm({ onFormChange, isTranslating }: Indonesian
     if (form.formState.isValid && aFieldIsNotEmpty) {
       onFormChange(watchedValues);
     } else if (!aFieldIsNotEmpty) {
+      // If all fields are empty, reset to default (which effectively clears translation)
       onFormChange(defaultIndonesianPromptValues);
     }
+    // Only depend on the stringified version of watchedValues to avoid infinite loops
   }, [JSON.stringify(watchedValues), onFormChange, form.formState.isValid]);
 
   return (
@@ -67,24 +120,75 @@ export function IndonesianPromptForm({ onFormChange, isTranslating }: Indonesian
         <Form {...form}>
           <form className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {formFields.map((field) => (
+              {formFields.map((fieldConfig) => (
                 <FormField
-                  key={field.name}
+                  key={fieldConfig.name}
                   control={form.control}
-                  name={field.name}
-                  render={({ field: formFieldProps }) => (
-                    <FormItem>
-                      <FormLabel>{field.label}{IndonesianPromptSchema.shape[field.name].isOptional() ? '' : ' *'}</FormLabel>
-                      <FormControl>
-                        {field.isTextarea ? (
-                          <Textarea placeholder={field.placeholder} {...formFieldProps} className="h-24"/>
-                        ) : (
-                          <Input placeholder={field.placeholder} {...formFieldProps} />
-                        )}
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  name={fieldConfig.name}
+                  render={({ field: formFieldProps }) => {
+                    const currentFieldValue = formFieldProps.value || "";
+                    
+                    if (fieldConfig.selectOptions) {
+                      const isStandardOption = fieldConfig.selectOptions.some(
+                        opt => opt.value === currentFieldValue && opt.value !== 'Lainnya'
+                      );
+                      const selectTriggerValue = isStandardOption ? currentFieldValue : "Lainnya";
+                      const showCustomInput = !isStandardOption || currentFieldValue === "Lainnya";
+
+                      return (
+                        <FormItem>
+                          <FormLabel>{fieldConfig.label}{IndonesianPromptSchema.shape[fieldConfig.name].isOptional() ? '' : ' *'}</FormLabel>
+                          <Select
+                            value={selectTriggerValue}
+                            onValueChange={(selectedValue) => {
+                              if (selectedValue === "Lainnya") {
+                                form.setValue(fieldConfig.name, "", { shouldValidate: true, shouldDirty: true });
+                              } else {
+                                form.setValue(fieldConfig.name, selectedValue, { shouldValidate: true, shouldDirty: true });
+                              }
+                            }}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder={`Pilih ${fieldConfig.label.toLowerCase()}`} />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {fieldConfig.selectOptions.map(option => (
+                                <SelectItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          {showCustomInput && (
+                            <Input
+                              {...formFieldProps} // Use controller props for binding
+                              value={currentFieldValue === "Lainnya" ? "" : currentFieldValue} // Ensure input shows custom text or is empty
+                              onChange={(e) => form.setValue(fieldConfig.name, e.target.value, { shouldValidate: true, shouldDirty: true })}
+                              placeholder={fieldConfig.placeholder || `Detail untuk ${fieldConfig.label.toLowerCase()}`}
+                              className="mt-2"
+                            />
+                          )}
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }
+                    
+                    return (
+                      <FormItem>
+                        <FormLabel>{fieldConfig.label}{IndonesianPromptSchema.shape[fieldConfig.name].isOptional() ? '' : ' *'}</FormLabel>
+                        <FormControl>
+                          {fieldConfig.isTextarea ? (
+                            <Textarea placeholder={fieldConfig.placeholder} {...formFieldProps} className="h-24"/>
+                          ) : (
+                            <Input placeholder={fieldConfig.placeholder} {...formFieldProps} />
+                          )}
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
                 />
               ))}
             </div>
@@ -99,4 +203,8 @@ export function IndonesianPromptForm({ onFormChange, isTranslating }: Indonesian
       </CardContent>
     </Card>
   );
+}
+interface IndonesianPromptFormProps {
+  onFormChange: (data: IndonesianPromptFormData) => void;
+  isTranslating: boolean;
 }
