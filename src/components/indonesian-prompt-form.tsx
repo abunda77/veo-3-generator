@@ -82,6 +82,11 @@ const videoStyleOptions = [
   { value: "Vintage", label: "Vintage" },
   { value: "Cartoon", label: "Kartun (Cartoon)" },
   { value: "Realistic", label: "Realistis (Realistic)" },
+  { value: "Stop Motion", label: "Stop Motion" },
+  { value: "Motion Graphics", label: "Grafik Gerak (Motion Graphics)" },
+  { value: "Timelapse", label: "Selang Waktu (Timelapse)" },
+  { value: "Slow Motion", label: "Gerak Lambat (Slow Motion)" },
+  { value: "Hyperlapse", label: "Hyperlapse" },
   { value: "Lainnya", label: "Lainnya..." },
 ];
 
