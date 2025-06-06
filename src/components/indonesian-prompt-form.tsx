@@ -1,4 +1,3 @@
-
 "use client";
 
 import type { IndonesianPromptFormData } from "@/lib/schemas";
@@ -151,14 +150,20 @@ export function IndonesianPromptForm({ onFormValuesChange, onGeneratePrompts, is
     mode: "onChange", // Trigger validation on change
   });
 
-  const watchedValues = form.watch();
-
+  // Menggunakan useEffect dengan debounce untuk mengurangi frekuensi pembaruan
   useEffect(() => {
-    // Using JSON.stringify to ensure the effect runs only when values actually change,
-    // not just when the watchedValues object reference changes.
-    onFormValuesChange(watchedValues);
-  }, [JSON.stringify(watchedValues), onFormValuesChange]);
-
+    const subscription = form.watch((value, { name, type }) => {
+      // Hanya kirim perubahan ke parent setelah 300ms tidak ada ketikan baru
+      const timeoutId = setTimeout(() => {
+        onFormValuesChange(form.getValues());
+      }, 300);
+      
+      return () => clearTimeout(timeoutId);
+    });
+    
+    // Cleanup subscription saat komponen unmount
+    return () => subscription.unsubscribe();
+  }, [form, onFormValuesChange]);
 
   return (
     <Card>

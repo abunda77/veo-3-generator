@@ -1,4 +1,3 @@
-
 "use client";
 
 import type { IndonesianPromptFormData } from "@/lib/schemas";
@@ -8,7 +7,7 @@ import { translateFreeformIndonesian } from "@/ai/flows/translate-freeform-indon
 import { enhancePromptQuality, type EnhancePromptQualityOutput } from "@/ai/flows/enhance-prompt-quality";
 import { useState, useCallback, useTransition, useEffect } from "react";
 import { IndonesianPromptForm } from "./indonesian-prompt-form";
-import { GeneratedPromptsDisplay } from "./generated-prompts-display"; // Changed import
+import { GeneratedPromptsDisplay } from "./generated-prompts-display";
 import { PromptEnhancementSection } from "./prompt-enhancement-section";
 import { AppHeader } from "./app-header";
 import { useToast } from "@/hooks/use-toast";
@@ -48,6 +47,7 @@ function formatIndonesianPromptFromData(data: IndonesianPromptFormData): string 
 
 export default function VeoPromptifyClientPage() {
   const [currentFormData, setCurrentFormData] = useState<IndonesianPromptFormData>(defaultIndonesianPromptValues);
+  const [formDataAtGeneration, setFormDataAtGeneration] = useState<IndonesianPromptFormData | null>(null);
   const [generatedIndonesianPrompt, setGeneratedIndonesianPrompt] = useState<string | null>(null);
   const [finalEnglishPrompt, setFinalEnglishPrompt] = useState<string | null>(null);
   const [enhancementResult, setEnhancementResult] = useState<EnhancePromptQualityOutput | null>(null);
@@ -58,16 +58,29 @@ export default function VeoPromptifyClientPage() {
 
   const { toast } = useToast();
 
+  // Stable callback to update current form data
   const handleFormValuesChange = useCallback((data: IndonesianPromptFormData) => {
     setCurrentFormData(data);
-    // If form changes after prompts were generated, clear them to indicate they are stale
-    // or require user to click "Buat Prompt" again. For now, let's clear them.
-    if (generatedIndonesianPrompt !== null || finalEnglishPrompt !== null) {
+  }, []);
+
+  // Effect to clear prompts if form data changes after generation
+  useEffect(() => {
+    if (formDataAtGeneration && JSON.stringify(currentFormData) !== JSON.stringify(formDataAtGeneration)) {
+      if (generatedIndonesianPrompt !== null || finalEnglishPrompt !== null) {
         setGeneratedIndonesianPrompt(null);
         setFinalEnglishPrompt(null);
         setEnhancementResult(null);
+        setFormDataAtGeneration(null); // Reset: prompts are now cleared, new generation will set this again
+        // Optionally, inform user why prompts were cleared
+        // toast({
+        //   title: "Formulir berubah",
+        //   description: "Prompt telah dihapus karena input formulir diubah. Silakan buat ulang.",
+        //   variant: "default"
+        // });
+      }
     }
-  }, [generatedIndonesianPrompt, finalEnglishPrompt]);
+  }, [currentFormData, formDataAtGeneration, generatedIndonesianPrompt, finalEnglishPrompt, toast]);
+
 
   const handleGenerateInitialPrompts = useCallback(async () => {
     if (!currentFormData.subject || !currentFormData.action) {
@@ -84,9 +97,24 @@ export default function VeoPromptifyClientPage() {
         const indonesianText = formatIndonesianPromptFromData(currentFormData);
         setGeneratedIndonesianPrompt(indonesianText);
 
-        const translationResult = await translateIndonesianPrompt(currentFormData);
+        const formDataWithDefaults = {
+          ...currentFormData,
+          expression: currentFormData.expression || '',
+          place: currentFormData.place || '',
+          time: currentFormData.time || '',
+          cameraMovement: currentFormData.cameraMovement || '',
+          lighting: currentFormData.lighting || '',
+          videoStyle: currentFormData.videoStyle || '',
+          videoMood: currentFormData.videoMood || '',
+          soundMusic: currentFormData.soundMusic || '',
+          spokenSentence: currentFormData.spokenSentence || '',
+          additionalDetails: currentFormData.additionalDetails || ''
+        };
+
+        const translationResult = await translateIndonesianPrompt(formDataWithDefaults);
         setFinalEnglishPrompt(translationResult.englishPrompt);
         setEnhancementResult(null); // Clear previous enhancement
+        setFormDataAtGeneration(currentFormData); // Store form data used for this generation
       } catch (error) {
         console.error("Initial prompt generation/translation error:", error);
         toast({
@@ -96,6 +124,7 @@ export default function VeoPromptifyClientPage() {
         });
         setGeneratedIndonesianPrompt(null);
         setFinalEnglishPrompt(null);
+        setFormDataAtGeneration(null);
       }
     });
   }, [currentFormData, toast]);
@@ -111,6 +140,10 @@ export default function VeoPromptifyClientPage() {
         const result = await translateFreeformIndonesian({ text: editedText });
         setFinalEnglishPrompt(result.translatedText);
         setEnhancementResult(null); // Clear previous enhancement
+        // When freeform text is translated, it implies the "form data at generation" is no longer strictly the source.
+        // We might want to nullify formDataAtGeneration here, or handle it based on desired UX.
+        // For now, let's assume editing the Indonesian prompt means the original form data is less relevant for *this specific generated text pair*.
+        // setFormDataAtGeneration(null); // Or update it if we parse editedText back to form fields (complex)
       } catch (error) {
         console.error("Edited translation error:", error);
         toast({
@@ -118,8 +151,6 @@ export default function VeoPromptifyClientPage() {
           description: "Gagal menerjemahkan prompt yang diedit. Silakan coba lagi.",
           variant: "destructive",
         });
-        // Optionally keep the last known good translation or clear it
-        // setFinalEnglishPrompt(null); 
       }
     });
   }, [toast]);
@@ -127,8 +158,12 @@ export default function VeoPromptifyClientPage() {
   const debouncedTranslateEdited = useCallback(debounce(translateEditedIndonesianText, 750), [translateEditedIndonesianText]);
 
   const handleIndonesianPromptEdit = useCallback((newText: string) => {
-    setGeneratedIndonesianPrompt(newText); // Update the local state immediately for responsiveness
+    setGeneratedIndonesianPrompt(newText); 
     debouncedTranslateEdited(newText);
+     // If user edits the Indonesian prompt, the link to original structured form data is weakened.
+    // Clear formDataAtGeneration so that subsequent direct form edits don't incorrectly clear these manually edited/translated prompts.
+    // A new "Generate" click will re-establish this link.
+    setFormDataAtGeneration(null);
   }, [debouncedTranslateEdited]);
 
 
@@ -186,3 +221,4 @@ export default function VeoPromptifyClientPage() {
     </div>
   );
 }
+
