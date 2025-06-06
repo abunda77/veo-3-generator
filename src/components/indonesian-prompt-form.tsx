@@ -38,6 +38,9 @@ const cameraMovementOptions = [
   { value: "Tracking Shot", label: "Mengikuti (Tracking Shot)" },
   { value: "Handheld Shot", label: "Bidikan Genggam (Handheld Shot)" },
   { value: "Drone Shot", label: "Bidikan Drone (Drone Shot)" },
+  { value: "Dolly Shot", label: "Gerak Dolly (Dolly Shot)" },
+  { value: "Crane Shot", label: "Bidikan Derek (Crane Shot)" },
+  { value: "POV Shot", label: "Sudut Pandang Subjektif (POV Shot)" },
   { value: "Lainnya", label: "Lainnya..." },
 ];
 
@@ -101,14 +104,12 @@ export function IndonesianPromptForm({ onFormValuesChange, onGeneratePrompts, is
   const form = useForm<IndonesianPromptFormData>({
     resolver: zodResolver(IndonesianPromptSchema),
     defaultValues: defaultIndonesianPromptValues,
-    mode: "onChange", // Keep mode to onChange for instant validation
+    mode: "onChange", 
   });
 
   const watchedValues = form.watch();
 
   useEffect(() => {
-    // This effect now only informs the parent about form value changes
-    // It doesn't trigger translation directly.
     onFormValuesChange(watchedValues);
   }, [JSON.stringify(watchedValues), onFormValuesChange]);
 
@@ -206,3 +207,4 @@ export function IndonesianPromptForm({ onFormValuesChange, onGeneratePrompts, is
     </Card>
   );
 }
+
