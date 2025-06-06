@@ -30,80 +30,96 @@ interface FormFieldConfig {
 }
 
 const cameraMovementOptions = [
-  { value: "Static", label: "Diam (Static)" },
-  { value: "Pan", label: "Geser (Pan)" },
-  { value: "Pan Left", label: "Geser Kiri (Pan Left)" },
-  { value: "Pan Right", label: "Geser Kanan (Pan Right)" },
-  { value: "Tilt", label: "Miring (Tilt)" },
-  { value: "Tilt Up", label: "Miring ke Atas (Tilt Up)" },
-  { value: "Tilt Down", label: "Miring ke Bawah (Tilt Down)" },
+  { value: "Diam (Static)", label: "Diam (Static)" },
+  { value: "Geser (Pan)", label: "Geser (Pan)" },
+  { value: "Geser Kiri (Pan Left)", label: "Geser Kiri (Pan Left)" },
+  { value: "Geser Kanan (Pan Right)", label: "Geser Kanan (Pan Right)" },
+  { value: "Miring (Tilt)", label: "Miring (Tilt)" },
+  { value: "Miring ke Atas (Tilt Up)", label: "Miring ke Atas (Tilt Up)" },
+  { value: "Miring ke Bawah (Tilt Down)", label: "Miring ke Bawah (Tilt Down)" },
   { value: "Zoom In", label: "Zoom In" },
   { value: "Zoom Out", label: "Zoom Out" },
-  { value: "Dolly Shot", label: "Gerak Dolly (Dolly Shot)" },
-  { value: "Dolly In", label: "Dolly Masuk (Dolly In)" },
-  { value: "Dolly Out", label: "Dolly Keluar (Dolly Out)" },
-  { value: "Truck Left", label: "Gerak ke Kiri (Truck Left)" },
-  { value: "Truck Right", label: "Gerak ke Kanan (Truck Right)" },
-  { value: "Pedestal Up", label: "Naik (Pedestal Up)" },
-  { value: "Pedestal Down", label: "Turun (Pedestal Down)" },
-  { value: "Tracking Shot", label: "Mengikuti (Tracking Shot)" },
-  { value: "Handheld Shot", label: "Bidikan Genggam (Handheld Shot)" },
-  { value: "Drone Shot", label: "Bidikan Drone (Drone Shot)" },
-  { value: "Crane Shot", label: "Bidikan Derek (Crane Shot)" },
-  { value: "Boom Shot", label: "Bidikan Boom (Boom Shot)" },
-  { value: "POV Shot", label: "Sudut Pandang Subjektif (POV Shot)" },
-  { value: "Arc Shot", label: "Bidikan Melengkung (Arc Shot)" },
-  { value: "Dutch Angle", label: "Sudut Miring (Dutch Angle)" },
+  { value: "Gerak Dolly (Dolly Shot)", label: "Gerak Dolly (Dolly Shot)" },
+  { value: "Dolly Masuk (Dolly In)", label: "Dolly Masuk (Dolly In)" },
+  { value: "Dolly Keluar (Dolly Out)", label: "Dolly Keluar (Dolly Out)" },
+  { value: "Gerak ke Kiri (Truck Left)", label: "Gerak ke Kiri (Truck Left)" },
+  { value: "Gerak ke Kanan (Truck Right)", label: "Gerak ke Kanan (Truck Right)" },
+  { value: "Naik (Pedestal Up)", label: "Naik (Pedestal Up)" },
+  { value: "Turun (Pedestal Down)", label: "Turun (Pedestal Down)" },
+  { value: "Mengikuti (Tracking Shot)", label: "Mengikuti (Tracking Shot)" },
+  { value: "Bidikan Genggam (Handheld Shot)", label: "Bidikan Genggam (Handheld Shot)" },
+  { value: "Bidikan Drone (Drone Shot)", label: "Bidikan Drone (Drone Shot)" },
+  { value: "Bidikan Derek (Crane Shot)", label: "Bidikan Derek (Crane Shot)" },
+  { value: "Bidikan Boom (Boom Shot)", label: "Bidikan Boom (Boom Shot)" },
+  { value: "Sudut Pandang Subjektif (POV Shot)", label: "Sudut Pandang Subjektif (POV Shot)" },
+  { value: "Bidikan Melengkung (Arc Shot)", label: "Bidikan Melengkung (Arc Shot)" },
+  { value: "Sudut Miring (Dutch Angle)", label: "Sudut Miring (Dutch Angle)" },
   { value: "Lainnya", label: "Lainnya..." },
 ];
 
 const lightingOptions = [
-  { value: "Natural", label: "Alami (Natural)" },
+  { value: "Alami (Natural)", label: "Alami (Natural)" },
   { value: "Studio", label: "Studio" },
-  { value: "Low Key", label: "Low Key (Gelap)" },
-  { value: "High Key", label: "High Key (Terang)" },
-  { value: "Backlight", label: "Cahaya Belakang (Backlight)" },
-  { value: "Side Light", label: "Cahaya Samping (Side Light)" },
-  { value: "Spotlight", label: "Lampu Sorot (Spotlight)" },
-  { value: "Soft Light", label: "Cahaya Lembut (Soft Light)" },
-  { value: "Hard Light", label: "Cahaya Keras (Hard Light)" },
-  { value: "Colored Light", label: "Cahaya Berwarna (Colored Light)" },
-  { value: "Morning Light", label: "Cahaya Pagi (Morning Light)" },
-  { value: "Night Light", label: "Cahaya Malam (Night Light)" },
+  { value: "Low Key (Gelap)", label: "Low Key (Gelap)" },
+  { value: "High Key (Terang)", label: "High Key (Terang)" },
+  { value: "Cahaya Belakang (Backlight)", label: "Cahaya Belakang (Backlight)" },
+  { value: "Cahaya Samping (Side Light)", label: "Cahaya Samping (Side Light)" },
+  { value: "Lampu Sorot (Spotlight)", label: "Lampu Sorot (Spotlight)" },
+  { value: "Cahaya Lembut (Soft Light)", label: "Cahaya Lembut (Soft Light)" },
+  { value: "Cahaya Keras (Hard Light)", label: "Cahaya Keras (Hard Light)" },
+  { value: "Cahaya Berwarna (Colored Light)", label: "Cahaya Berwarna (Colored Light)" },
+  { value: "Cahaya Pagi (Morning Light)", label: "Cahaya Pagi (Morning Light)" },
+  { value: "Cahaya Malam (Night Light)", label: "Cahaya Malam (Night Light)" },
   { value: "Lainnya", label: "Lainnya..." },
 ];
 
 const videoStyleOptions = [
-  { value: "Cinematic", label: "Sinematik (Cinematic)" },
-  { value: "Documentary", label: "Dokumenter (Documentary)" },
+  { value: "Sinematik (Cinematic)", label: "Sinematik (Cinematic)" },
+  { value: "Dokumenter (Documentary)", label: "Dokumenter (Documentary)" },
   { value: "Vlog", label: "Vlog" },
-  { value: "Animation", label: "Animasi (Animation)" },
-  { value: "Black and White", label: "Hitam Putih (Black and White)" },
+  { value: "Animasi (Animation)", label: "Animasi (Animation)" },
+  { value: "Hitam Putih (Black and White)", label: "Hitam Putih (Black and White)" },
   { value: "Vintage", label: "Vintage" },
-  { value: "Cartoon", label: "Kartun (Cartoon)" },
-  { value: "Realistic", label: "Realistis (Realistic)" },
+  { value: "Kartun (Cartoon)", label: "Kartun (Cartoon)" },
+  { value: "Realistis (Realistic)", label: "Realistis (Realistic)" },
   { value: "Stop Motion", label: "Stop Motion" },
-  { value: "Motion Graphics", label: "Grafik Gerak (Motion Graphics)" },
-  { value: "Timelapse", label: "Selang Waktu (Timelapse)" },
-  { value: "Slow Motion", label: "Gerak Lambat (Slow Motion)" },
+  { value: "Grafik Gerak (Motion Graphics)", label: "Grafik Gerak (Motion Graphics)" },
+  { value: "Selang Waktu (Timelapse)", label: "Selang Waktu (Timelapse)" },
+  { value: "Gerak Lambat (Slow Motion)", label: "Gerak Lambat (Slow Motion)" },
   { value: "Hyperlapse", label: "Hyperlapse" },
   { value: "Lainnya", label: "Lainnya..." },
 ];
 
 const videoMoodOptions = [
-  { value: "Cheerful", label: "Ceria (Cheerful)" },
-  { value: "Melancholic", label: "Melankolis (Melancholic)" },
-  { value: "Suspenseful", label: "Tegang (Suspenseful)" },
-  { value: "Romantic", label: "Romantis (Romantic)" },
-  { value: "Mysterious", label: "Misterius (Mysterious)" },
-  { value: "Nostalgic", label: "Nostalgia (Nostalgic)" },
-  { value: "Inspirational", label: "Inspiratif (Inspirational)" },
-  { value: "Scary", label: "Menakutkan (Scary)" },
-  { value: "Peaceful", label: "Damai (Peaceful)" },
-  { value: "Energetic", label: "Energetik (Energetic)" },
-  { value: "Sad", label: "Sedih (Sad)" },
-  { value: "Funny", label: "Lucu (Funny)" },
-  { value: "Dramatic", label: "Dramatis (Dramatic)" },
+  { value: "Ceria (Cheerful)", label: "Ceria (Cheerful)" },
+  { value: "Melankolis (Melancholic)", label: "Melankolis (Melancholic)" },
+  { value: "Tegang (Suspenseful)", label: "Tegang (Suspenseful)" },
+  { value: "Romantis (Romantic)", label: "Romantis (Romantic)" },
+  { value: "Misterius (Mysterious)", label: "Misterius (Mysterious)" },
+  { value: "Nostalgia (Nostalgic)", label: "Nostalgia (Nostalgic)" },
+  { value: "Inspiratif (Inspirational)", label: "Inspiratif (Inspirational)" },
+  { value: "Menakutkan (Scary)", label: "Menakutkan (Scary)" },
+  { value: "Damai (Peaceful)", label: "Damai (Peaceful)" },
+  { value: "Energetik (Energetic)", label: "Energetik (Energetic)" },
+  { value: "Sedih (Sad)", label: "Sedih (Sad)" },
+  { value: "Lucu (Funny)", label: "Lucu (Funny)" },
+  { value: "Dramatis (Dramatic)", label: "Dramatis (Dramatic)" },
+  { value: "Lainnya", label: "Lainnya..." },
+];
+
+const soundMusicOptions = [
+  { value: "Musik Instrumental yang Menenangkan", label: "Musik Instrumental yang Menenangkan" },
+  { value: "Musik Klasik", label: "Musik Klasik" },
+  { value: "Musik Pop", label: "Musik Pop" },
+  { value: "Musik Rock", label: "Musik Rock" },
+  { value: "Musik Jazz", label: "Musik Jazz" },
+  { value: "Musik Elektronik", label: "Musik Elektronik" },
+  { value: "Suara Alam (e.g., Burung Berkicau, Ombak Laut)", label: "Suara Alam (e.g., Burung, Ombak)" },
+  { value: "Suara Hujan", label: "Suara Hujan" },
+  { value: "Musik Latar Epik", label: "Musik Latar Epik" },
+  { value: "Suara Ambient", label: "Suara Ambient" },
+  { value: "Musik Tradisional", label: "Musik Tradisional" },
+  { value: "Musik Akustik", label: "Musik Akustik" },
   { value: "Lainnya", label: "Lainnya..." },
 ];
 
@@ -113,11 +129,11 @@ const formFields: Array<FormFieldConfig> = [
   { name: "expression", label: "Expression", placeholder: "e.g., tersenyum bahagia" },
   { name: "place", label: "Place", placeholder: "e.g., taman kota yang ramai" },
   { name: "time", label: "Time", placeholder: "e.g., sore hari keemasan" },
-  { name: "cameraMovement", label: "Camera Movement", selectOptions: cameraMovementOptions, placeholder: "e.g., mengikuti subjek dari belakang" },
-  { name: "lighting", label: "Lighting", selectOptions: lightingOptions, placeholder: "e.g., cahaya senja hangat" },
-  { name: "videoStyle", label: "Video Style", selectOptions: videoStyleOptions, placeholder: "e.g., gaya Wes Anderson" },
-  { name: "videoMood", label: "Video Mood", selectOptions: videoMoodOptions, placeholder: "e.g., penuh harapan dan optimis" },
-  { name: "soundMusic", label: "Sound/Music", placeholder: "e.g., musik instrumental yang menenangkan" },
+  { name: "cameraMovement", label: "Camera Movement", selectOptions: cameraMovementOptions, placeholder: "Detail gerakan kamera..." },
+  { name: "lighting", label: "Lighting", selectOptions: lightingOptions, placeholder: "Detail pencahayaan..." },
+  { name: "videoStyle", label: "Video Style", selectOptions: videoStyleOptions, placeholder: "Detail gaya video..." },
+  { name: "videoMood", label: "Video Mood", selectOptions: videoMoodOptions, placeholder: "Detail suasana video..." },
+  { name: "soundMusic", label: "Sound/Music", selectOptions: soundMusicOptions, placeholder: "e.g., musik instrumental yang menenangkan" },
   { name: "spokenSentence", label: "Spoken Sentence", placeholder: "e.g., 'Ini hari yang indah.'", isTextarea: true },
   { name: "additionalDetails", label: "Additional Details", placeholder: "e.g., Mengenakan gaun merah, ada anjing kecil berlarian.", isTextarea: true },
 ];
@@ -132,12 +148,14 @@ export function IndonesianPromptForm({ onFormValuesChange, onGeneratePrompts, is
   const form = useForm<IndonesianPromptFormData>({
     resolver: zodResolver(IndonesianPromptSchema),
     defaultValues: defaultIndonesianPromptValues,
-    mode: "onChange",
+    mode: "onChange", // Trigger validation on change
   });
 
   const watchedValues = form.watch();
 
   useEffect(() => {
+    // Using JSON.stringify to ensure the effect runs only when values actually change,
+    // not just when the watchedValues object reference changes.
     onFormValuesChange(watchedValues);
   }, [JSON.stringify(watchedValues), onFormValuesChange]);
 
@@ -157,13 +175,22 @@ export function IndonesianPromptForm({ onFormValuesChange, onGeneratePrompts, is
                   control={form.control}
                   name={fieldConfig.name}
                   render={({ field: formFieldProps }) => {
-                    const currentFieldValue = formFieldProps.value || "";
+                    // Get current value, ensure it's a string for comparison, default to empty string if null/undefined
+                    const currentFieldValue = typeof formFieldProps.value === 'string' ? formFieldProps.value : "";
 
                     if (fieldConfig.selectOptions) {
+                      // Check if the current value is one of the standard options (excluding "Lainnya")
                       const isStandardOption = fieldConfig.selectOptions.some(
                         opt => opt.value === currentFieldValue && opt.value !== 'Lainnya'
                       );
+                      // Determine what to display in the SelectTrigger:
+                      // - If it's a standard option, display its value.
+                      // - If it's a custom value (not "Lainnya" and not in options), or if "Lainnya" was explicitly selected, display "Lainnya".
                       const selectTriggerValue = isStandardOption ? currentFieldValue : "Lainnya";
+                      
+                      // Show custom input if:
+                      // 1. "Lainnya" is selected OR
+                      // 2. The current value is not a standard option (implying it's custom text)
                       const showCustomInput = !isStandardOption || currentFieldValue === "Lainnya";
 
                       return (
@@ -173,6 +200,9 @@ export function IndonesianPromptForm({ onFormValuesChange, onGeneratePrompts, is
                             value={selectTriggerValue}
                             onValueChange={(selectedValue) => {
                               if (selectedValue === "Lainnya") {
+                                // When "Lainnya" is selected, we want to clear the field
+                                // so the user can type a new custom value.
+                                // If it was already a custom value, this effectively prepares the input.
                                 form.setValue(fieldConfig.name, "", { shouldValidate: true, shouldDirty: true });
                               } else {
                                 form.setValue(fieldConfig.name, selectedValue, { shouldValidate: true, shouldDirty: true });
@@ -194,8 +224,8 @@ export function IndonesianPromptForm({ onFormValuesChange, onGeneratePrompts, is
                           </Select>
                           {showCustomInput && (
                             <Input
-                              {...formFieldProps}
-                              value={currentFieldValue === "Lainnya" ? "" : currentFieldValue}
+                              {...formFieldProps} // Spread existing props like name, onBlur, ref
+                              value={currentFieldValue === "Lainnya" ? "" : currentFieldValue} // If "Lainnya" was the value, start input empty
                               onChange={(e) => form.setValue(fieldConfig.name, e.target.value, { shouldValidate: true, shouldDirty: true })}
                               placeholder={fieldConfig.placeholder || `Detail untuk ${fieldConfig.label.toLowerCase()}`}
                               className="mt-2"
@@ -206,6 +236,7 @@ export function IndonesianPromptForm({ onFormValuesChange, onGeneratePrompts, is
                       );
                     }
 
+                    // Fallback for non-select fields (Input or Textarea)
                     return (
                       <FormItem>
                         <FormLabel>{fieldConfig.label}{IndonesianPromptSchema.shape[fieldConfig.name].isOptional() ? '' : ' *'}</FormLabel>
@@ -235,3 +266,4 @@ export function IndonesianPromptForm({ onFormValuesChange, onGeneratePrompts, is
     </Card>
   );
 }
+
