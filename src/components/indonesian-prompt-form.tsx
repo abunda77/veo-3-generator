@@ -32,15 +32,28 @@ interface FormFieldConfig {
 const cameraMovementOptions = [
   { value: "Static", label: "Diam (Static)" },
   { value: "Pan", label: "Geser (Pan)" },
+  { value: "Pan Left", label: "Geser Kiri (Pan Left)" },
+  { value: "Pan Right", label: "Geser Kanan (Pan Right)" },
   { value: "Tilt", label: "Miring (Tilt)" },
+  { value: "Tilt Up", label: "Miring ke Atas (Tilt Up)" },
+  { value: "Tilt Down", label: "Miring ke Bawah (Tilt Down)" },
   { value: "Zoom In", label: "Zoom In" },
   { value: "Zoom Out", label: "Zoom Out" },
+  { value: "Dolly Shot", label: "Gerak Dolly (Dolly Shot)" },
+  { value: "Dolly In", label: "Dolly Masuk (Dolly In)" },
+  { value: "Dolly Out", label: "Dolly Keluar (Dolly Out)" },
+  { value: "Truck Left", label: "Gerak ke Kiri (Truck Left)" },
+  { value: "Truck Right", label: "Gerak ke Kanan (Truck Right)" },
+  { value: "Pedestal Up", label: "Naik (Pedestal Up)" },
+  { value: "Pedestal Down", label: "Turun (Pedestal Down)" },
   { value: "Tracking Shot", label: "Mengikuti (Tracking Shot)" },
   { value: "Handheld Shot", label: "Bidikan Genggam (Handheld Shot)" },
   { value: "Drone Shot", label: "Bidikan Drone (Drone Shot)" },
-  { value: "Dolly Shot", label: "Gerak Dolly (Dolly Shot)" },
   { value: "Crane Shot", label: "Bidikan Derek (Crane Shot)" },
+  { value: "Boom Shot", label: "Bidikan Boom (Boom Shot)" },
   { value: "POV Shot", label: "Sudut Pandang Subjektif (POV Shot)" },
+  { value: "Arc Shot", label: "Bidikan Melengkung (Arc Shot)" },
+  { value: "Dutch Angle", label: "Sudut Miring (Dutch Angle)" },
   { value: "Lainnya", label: "Lainnya..." },
 ];
 
@@ -104,7 +117,7 @@ export function IndonesianPromptForm({ onFormValuesChange, onGeneratePrompts, is
   const form = useForm<IndonesianPromptFormData>({
     resolver: zodResolver(IndonesianPromptSchema),
     defaultValues: defaultIndonesianPromptValues,
-    mode: "onChange", 
+    mode: "onChange",
   });
 
   const watchedValues = form.watch();
@@ -130,7 +143,7 @@ export function IndonesianPromptForm({ onFormValuesChange, onGeneratePrompts, is
                   name={fieldConfig.name}
                   render={({ field: formFieldProps }) => {
                     const currentFieldValue = formFieldProps.value || "";
-                    
+
                     if (fieldConfig.selectOptions) {
                       const isStandardOption = fieldConfig.selectOptions.some(
                         opt => opt.value === currentFieldValue && opt.value !== 'Lainnya'
@@ -166,8 +179,8 @@ export function IndonesianPromptForm({ onFormValuesChange, onGeneratePrompts, is
                           </Select>
                           {showCustomInput && (
                             <Input
-                              {...formFieldProps} 
-                              value={currentFieldValue === "Lainnya" ? "" : currentFieldValue} 
+                              {...formFieldProps}
+                              value={currentFieldValue === "Lainnya" ? "" : currentFieldValue}
                               onChange={(e) => form.setValue(fieldConfig.name, e.target.value, { shouldValidate: true, shouldDirty: true })}
                               placeholder={fieldConfig.placeholder || `Detail untuk ${fieldConfig.label.toLowerCase()}`}
                               className="mt-2"
@@ -177,7 +190,7 @@ export function IndonesianPromptForm({ onFormValuesChange, onGeneratePrompts, is
                         </FormItem>
                       );
                     }
-                    
+
                     return (
                       <FormItem>
                         <FormLabel>{fieldConfig.label}{IndonesianPromptSchema.shape[fieldConfig.name].isOptional() ? '' : ' *'}</FormLabel>
@@ -207,4 +220,3 @@ export function IndonesianPromptForm({ onFormValuesChange, onGeneratePrompts, is
     </Card>
   );
 }
-
