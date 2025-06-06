@@ -99,6 +99,11 @@ const videoMoodOptions = [
   { value: "Nostalgic", label: "Nostalgia (Nostalgic)" },
   { value: "Inspirational", label: "Inspiratif (Inspirational)" },
   { value: "Scary", label: "Menakutkan (Scary)" },
+  { value: "Peaceful", label: "Damai (Peaceful)" },
+  { value: "Energetic", label: "Energetik (Energetic)" },
+  { value: "Sad", label: "Sedih (Sad)" },
+  { value: "Funny", label: "Lucu (Funny)" },
+  { value: "Dramatic", label: "Dramatis (Dramatic)" },
   { value: "Lainnya", label: "Lainnya..." },
 ];
 
