@@ -65,6 +65,11 @@ const lightingOptions = [
   { value: "Backlight", label: "Cahaya Belakang (Backlight)" },
   { value: "Side Light", label: "Cahaya Samping (Side Light)" },
   { value: "Spotlight", label: "Lampu Sorot (Spotlight)" },
+  { value: "Soft Light", label: "Cahaya Lembut (Soft Light)" },
+  { value: "Hard Light", label: "Cahaya Keras (Hard Light)" },
+  { value: "Colored Light", label: "Cahaya Berwarna (Colored Light)" },
+  { value: "Morning Light", label: "Cahaya Pagi (Morning Light)" },
+  { value: "Night Light", label: "Cahaya Malam (Night Light)" },
   { value: "Lainnya", label: "Lainnya..." },
 ];
 
