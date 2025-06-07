@@ -186,37 +186,53 @@ export default function VeoPromptifyClientPage() {
   }, [toast]);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-background">
       <AppHeader />
-      <main className="flex-grow container mx-auto py-8 px-4 md:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-          <div>
-            <IndonesianPromptForm 
-              onFormValuesChange={handleFormValuesChange} 
-              onGeneratePrompts={handleGenerateInitialPrompts}
-              isProcessing={isProcessingInitialPrompts} 
-            />
-          </div>
-          <div className="space-y-8">
-            <GeneratedPromptsDisplay
-              indonesianPrompt={generatedIndonesianPrompt}
-              onIndonesianPromptChange={handleIndonesianPromptEdit}
-              englishPrompt={finalEnglishPrompt}
-              isProcessingInitial={isProcessingInitialPrompts}
-              isTranslatingEdited={isTranslatingEdited}
-            />
-            { (generatedIndonesianPrompt || finalEnglishPrompt) && <Separator />}
-            <PromptEnhancementSection
-              englishPrompt={finalEnglishPrompt}
-              onEnhance={handleEnhancePrompt}
-              enhancementResult={enhancementResult}
-              isLoading={isEnhancing}
-            />
+      <main className="flex-grow container mx-auto py-8 px-4 md:px-6 animate-fade-in">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-3xl font-bold tracking-tight mb-6 text-center">
+            Generator Prompt Video <span className="text-primary">Veo</span>
+          </h1>
+          <p className="text-muted-foreground text-center mb-10 max-w-2xl mx-auto">
+            Buat prompt video berkualitas tinggi dalam Bahasa Indonesia dan Inggris dengan mudah. Dapatkan hasil yang optimal untuk generator video AI Veo.
+          </p>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <div className="transition-all duration-300 hover:shadow-lg rounded-lg">
+              <IndonesianPromptForm 
+                onFormValuesChange={handleFormValuesChange} 
+                onGeneratePrompts={handleGenerateInitialPrompts}
+                isProcessing={isProcessingInitialPrompts} 
+              />
+            </div>
+            <div className="space-y-8">
+              <div className="transition-all duration-300 hover:shadow-lg rounded-lg">
+                <GeneratedPromptsDisplay
+                  indonesianPrompt={generatedIndonesianPrompt}
+                  onIndonesianPromptChange={handleIndonesianPromptEdit}
+                  englishPrompt={finalEnglishPrompt}
+                  isProcessingInitial={isProcessingInitialPrompts}
+                  isTranslatingEdited={isTranslatingEdited}
+                />
+              </div>
+              {(generatedIndonesianPrompt || finalEnglishPrompt) && <Separator className="my-4" />}
+              <div className="transition-all duration-300 hover:shadow-lg rounded-lg">
+                <PromptEnhancementSection
+                  englishPrompt={finalEnglishPrompt}
+                  onEnhance={handleEnhancePrompt}
+                  enhancementResult={enhancementResult}
+                  isLoading={isEnhancing}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </main>
       <footer className="py-6 text-center text-sm text-muted-foreground border-t">
-        © {new Date().getFullYear()} VeoPromptify. All rights reserved.
+        <div className="container mx-auto">
+          <p>© {new Date().getFullYear()} VeoPromptify. All rights reserved.</p>
+          <p className="mt-1">Buat prompt video berkualitas tinggi untuk Veo</p>
+        </div>
       </footer>
     </div>
   );
